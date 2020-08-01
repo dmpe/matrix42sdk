@@ -2,6 +2,8 @@
 
 "ERP for Software Asset Management"
 
+[![matrix42sdk package in my-feed feed in Azure Artifacts](https://feeds.dev.azure.com/johnmalc/2efa647f-e5a5-4720-835d-4fc45fde9432/_apis/public/Packaging/Feeds/0c65acb4-f8ae-4df6-9f17-9db0f7687350/Packages/313927f6-82a5-4f2b-9bb0-9b90bcf3cec2/Badge)](https://dev.azure.com/johnmalc/Matrix42SDK/_packaging?_a=package&feed=0c65acb4-f8ae-4df6-9f17-9db0f7687350&package=313927f6-82a5-4f2b-9bb0-9b90bcf3cec2&preferRelease=true)
+
 ## The background story
 
 As of July 2020, Matrix42 AG, a German company is offering a [Configuration Management Database (CMBD)](https://www.matrix42.com/en/digital-workspace-management/enterprise-service-management) - basically a competing product to ServiceNOW and many others like MSFT Intune.
