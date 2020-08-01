@@ -87,16 +87,8 @@ jobs:
     inputs:
       artifactFeed: 'Matrix42SDK/my-feed'
 
-  - bash: twine upload --config-file $(srcDirectory)/.pypirc --non-interactive -r my-feed dist/*
+  - bash: twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
     displayName: Publish artifacts
-
-  # Upload everything in src/simple_package/dist (including subfolders) to the build artifacts for later use or debugging
-  # Add pythonVersion to the artifact name to avoid conflicts and ensure we capture all build output
-  - task: PublishPipelineArtifact@0
-    displayName: Publish artifacts
-    inputs:
-      artifactName: matrix42sdk-2.0.0-py3-none-any.whl
-      targetPath: $(srcDirectory)/dist/matrix42sdk-2.0.0-py3-none-any.whl
 
   - task: SonarCloudPrepare@1
     inputs:
@@ -148,19 +140,19 @@ jobs:
     inputs:
       versionSpec: $(pythonVersion)
 
-  - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
-    displayName: update pip and some other basic packages
+  # - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
+  #   displayName: update pip and some other basic packages
 
-  - bash: pip3 install poetry
-    displayName: install poetry
+  # - bash: pip3 install poetry
+  #   displayName: install poetry
 
-  - bash: poetry config virtualenvs.create false
-    displayName: disable creating virtual environments
+  # - bash: poetry config virtualenvs.create false
+  #   displayName: disable creating virtual environments
 
-  - task: TwineAuthenticate@1
-    inputs:
-      artifactFeed: 'Matrix42SDK/my-feed'
+  # - task: TwineAuthenticate@1
+  #   inputs:
+  #     artifactFeed: 'Matrix42SDK/my-feed'
 
-  - bash: twine upload --config-file $(srcDirectory)/.pypirc --non-interactive -r my-feed dist/*
-    displayName: Publish artifacts
+  # - bash: twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
+  #   displayName: Publish artifacts
 
