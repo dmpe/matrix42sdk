@@ -17,13 +17,13 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "~3" #minimal
 requests = "*"
+black = "*"
+mypy = "*"
 
 [tool.poetry.dev-dependencies]
 mock = "*"
-pytest-cov = "*"
 isort = {extras = ["pyproject"], version = "*"}
-black = "*"
-mypy = "*"
+pytest-cov = "*"
 pytest = "*"
 pylint = "*"
 twine = "*"
