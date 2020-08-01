@@ -75,7 +75,7 @@ jobs:
 
   - task: WhiteSource Bolt@20
     inputs:
-      cwd: $(srcDirectory)
+      cwd: '$(srcDirectory)'
 
   # Run tests
   # - bash: pytest .
@@ -83,21 +83,24 @@ jobs:
   #   workingDirectory: $(srcDirectory)
 
   # Our built source dist & wheel will land in src/simple_package/dist
-  - bash: poetry build
+  - bash: poetry build -vv -n
     displayName: Build package
     workingDirectory: $(srcDirectory)
+
+  - task: TwineAuthenticate@1
+    inputs:
+      artifactFeed: 'Matrix42SDK/my-feed'
+
+  - bash: twine upload -r Matrix42SDK/my-feed dist/*
+    displayName: Publish artifacts
 
   # Upload everything in src/simple_package/dist (including subfolders) to the build artifacts for later use or debugging
   # Add pythonVersion to the artifact name to avoid conflicts and ensure we capture all build output
   - task: PublishPipelineArtifact@0
     displayName: Publish artifacts
     inputs:
-      artifactName: dist$(pythonVersion)
-      targetPath: $(srcDirectory)/dist
-
-  - task: TwineAuthenticate@1
-    inputs:
-      artifactFeed: 'Matrix42SDK/my-feed'
+      artifactName: matrix42sdk-2.0.0-py3-none-any.whl
+      targetPath: $(srcDirectory)/dist/matrix42sdk-2.0.0-py3-none-any.whl
 
 # If all Build steps for all Python versions have succeeded,
 # we will download one of the already-validated build assets and publish it to an Azure Artifacts feed
@@ -116,7 +119,7 @@ jobs:
 
   # Variables specific to the Publish job
   variables:
-    artifactName: dist$(publishedVersion)
+    artifactName: matrix42sdk-2.0.0-py3-none-any.whl
     pythonVersion: 3.6
 
   # Steps are the specific tasks that execute code and do things
@@ -144,10 +147,10 @@ jobs:
   - bash: poetry config virtualenvs.create false
     displayName: disable creating virtual environments
 
-  - bash: poetry config my-feed $(artifactFeed)
-    displayName: setup private azure repository
+  - task: TwineAuthenticate@1
+    inputs:
+      artifactFeed: 'Matrix42SDK/my-feed'
 
-  # Upload everything in the dist folder to the private Artifacts feed
-  - bash: poetry publish -n -r my-repository
+  - bash: twine upload -r Matrix42SDK/my-feed dist/*
     displayName: Publish artifacts
 
