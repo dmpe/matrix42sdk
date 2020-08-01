@@ -17,7 +17,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "~3" #minimal
 requests = "*"
-black = "~19"
+black = {version = "*", allows-prereleases = true }
 mypy = "*"
 
 [tool.poetry.dev-dependencies]
