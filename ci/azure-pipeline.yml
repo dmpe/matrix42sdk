@@ -121,7 +121,6 @@ jobs:
 
   # Variables specific to the Publish job
   variables:
-    artifactName: matrix42sdk-2.0.0-py3-none-any.whl
     pythonVersion: 3.6
 
   # Steps are the specific tasks that execute code and do things
@@ -129,10 +128,6 @@ jobs:
 
   # Explicitly disable source checkout to keep a pristine environment for publishing
   - checkout: none
-
-  # Download from build artifacts
-  - download: current
-    artifact: $(artifactName)
 
   # Set the version of Python to use for publishing (which may or may not match the version the package was built with or tested against)
   - task: UsePythonVersion@0
