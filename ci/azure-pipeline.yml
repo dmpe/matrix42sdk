@@ -140,19 +140,17 @@ jobs:
     inputs:
       versionSpec: $(pythonVersion)
 
-  # - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
-  #   displayName: update pip and some other basic packages
-
-  # - bash: pip3 install poetry
-  #   displayName: install poetry
-
-  # - bash: poetry config virtualenvs.create false
-  #   displayName: disable creating virtual environments
-
-  # - task: TwineAuthenticate@1
-  #   inputs:
-  #     artifactFeed: 'Matrix42SDK/my-feed'
-
-  # - bash: twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
-  #   displayName: Publish artifacts
+  - task: GitHubRelease@1
+    inputs:
+      gitHubConnection: 'github.com_dmpe'
+      repositoryName: 'dmpe/matrix42sdk'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'gitTag'
+      title: 'New Release'
+      releaseNotesSource: 'inline'
+      releaseNotesInline: 'New released published in https://dev.azure.com/johnmalc/Matrix42SDK/_packaging?_a=feed&feed=my-feed'
+      isPreRelease: true
+      changeLogCompareToRelease: 'lastNonDraftRelease'
+      changeLogType: 'commitBased'
 
