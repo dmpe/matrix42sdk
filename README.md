@@ -3,6 +3,8 @@
 "ERP for Software Asset Management"
 
 [![matrix42sdk package in my-feed feed in Azure Artifacts](https://feeds.dev.azure.com/johnmalc/2efa647f-e5a5-4720-835d-4fc45fde9432/_apis/public/Packaging/Feeds/0c65acb4-f8ae-4df6-9f17-9db0f7687350/Packages/313927f6-82a5-4f2b-9bb0-9b90bcf3cec2/Badge)](https://dev.azure.com/johnmalc/Matrix42SDK/_packaging?_a=package&feed=0c65acb4-f8ae-4df6-9f17-9db0f7687350&package=313927f6-82a5-4f2b-9bb0-9b90bcf3cec2&preferRelease=true)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dmpe_matrix42sdk&metric=alert_status)](https://sonarcloud.io/dashboard?id=dmpe_matrix42sdk)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=dmpe_matrix42sdk)](https://sonarcloud.io/dashboard?id=dmpe_matrix42sdk)
 
 ## The background story
 
