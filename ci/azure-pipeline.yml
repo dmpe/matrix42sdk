@@ -121,7 +121,6 @@ jobs:
 
   # Variables specific to the Publish job
   variables:
-    artifactName: matrix42sdk-2.0.0-py3-none-any.whl
     pythonVersion: 3.6
 
   # Steps are the specific tasks that execute code and do things
@@ -130,29 +129,23 @@ jobs:
   # Explicitly disable source checkout to keep a pristine environment for publishing
   - checkout: none
 
-  # Download from build artifacts
-  - download: current
-    artifact: $(artifactName)
-
   # Set the version of Python to use for publishing (which may or may not match the version the package was built with or tested against)
   - task: UsePythonVersion@0
     displayName: Use Python $(pythonVersion)
     inputs:
       versionSpec: $(pythonVersion)
 
-  # - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
-  #   displayName: update pip and some other basic packages
-
-  # - bash: pip3 install poetry
-  #   displayName: install poetry
-
-  # - bash: poetry config virtualenvs.create false
-  #   displayName: disable creating virtual environments
-
-  # - task: TwineAuthenticate@1
-  #   inputs:
-  #     artifactFeed: 'Matrix42SDK/my-feed'
-
-  # - bash: twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
-  #   displayName: Publish artifacts
+  - task: GitHubRelease@1
+    inputs:
+      gitHubConnection: 'github.com_dmpe'
+      repositoryName: 'dmpe/matrix42sdk'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'gitTag'
+      title: 'New Release'
+      releaseNotesSource: 'inline'
+      releaseNotesInline: 'New released published in https://dev.azure.com/johnmalc/Matrix42SDK/_packaging?_a=feed&feed=my-feed'
+      isPreRelease: true
+      changeLogCompareToRelease: 'lastNonDraftRelease'
+      changeLogType: 'commitBased'
 
