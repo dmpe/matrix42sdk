@@ -91,7 +91,7 @@ jobs:
     inputs:
       artifactFeed: 'Matrix42SDK/my-feed'
 
-  - bash: twine upload -r my-feed dist/*
+  - bash: twine upload --config-file $(srcDirectory)/.pypirc -r my-feed dist/*
     displayName: Publish artifacts
 
   # Upload everything in src/simple_package/dist (including subfolders) to the build artifacts for later use or debugging
