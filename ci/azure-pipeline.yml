@@ -102,6 +102,17 @@ jobs:
       artifactName: matrix42sdk-2.0.0-py3-none-any.whl
       targetPath: $(srcDirectory)/dist/matrix42sdk-2.0.0-py3-none-any.whl
 
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'SonarCloud'
+      organization: 'dmpe-github'
+      scannerMode: 'CLI'
+      configMode: 'file'
+      configFile: '.sonarcloud.properties'
+
+  - task: SonarCloudAnalyze@1
+
+
 # If all Build steps for all Python versions have succeeded,
 # we will download one of the already-validated build assets and publish it to an Azure Artifacts feed
 - job: Publish
