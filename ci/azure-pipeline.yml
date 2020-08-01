@@ -55,17 +55,14 @@ jobs:
   - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
     displayName: update pip and some other basic packages
 
-  - bash: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+  - bash: pip3 install poetry
     displayName: install poetry
-  
-  - bash: source $HOME/.poetry/env
-    displayName: load poetry binary
 
   - bash: poetry config virtualenvs.create false
     displayName: disable creating virtual environments
 
   # Install some tools needed for build (pylint, flake8, etc)
-  - bash: poetry install 
+  - bash: poetry install
     displayName: Install packages for build
 
   # Lint via pylint. We need to find all .py files under src/simple_package and run pylint to avoid errors
@@ -134,16 +131,16 @@ jobs:
     displayName: Use Python $(pythonVersion)
     inputs:
       versionSpec: $(pythonVersion)
-  
+
   - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
     displayName: update pip and some other basic packages
 
-  - bash: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+  - bash: pip3 install poetry
     displayName: install poetry
 
   - bash: poetry config virtualenvs.create false
     displayName: disable creating virtual environments
-  
+
   - bash: poetry config my-feed $(artifactFeed)
     displayName: setup private azure repository
 
