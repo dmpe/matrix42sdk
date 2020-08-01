@@ -25,7 +25,7 @@ isort = {extras = ["pyproject"], version = "*"}
 black = {version = "*", allow-prereleases = true }
 pytest-cov = "*"
 pytest = "*"
-pylint = "*"
+# pylint = "*"
 twine = "*"
 keyring = "*"
 artifacts-keyring = "*"

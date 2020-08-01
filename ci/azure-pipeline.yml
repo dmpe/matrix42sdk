@@ -66,8 +66,8 @@ jobs:
     displayName: Install packages for build
 
   # Lint via pylint. We need to find all .py files under src/simple_package and run pylint to avoid errors
-  - bash: pylint $(package)
-    displayName: "Linting: pylint"
+  # - bash: pylint $(package)
+  #   displayName: "Linting: pylint"
 
   # Lint via black which has better discovery, so we can invoke it directly
   - bash: black . --config pyproject.toml

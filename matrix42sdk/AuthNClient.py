@@ -1,8 +1,5 @@
-import json
 import os
-import pprint
 import requests
-import sys
 import urllib3
 from configparser import ConfigParser
 from matrix42sdk.Exceptions import *
@@ -139,14 +136,14 @@ class RestClient(object):
         # print(MATRIX42_URL, "  ", MATRIX42SDK_API_TOKEN)
         return self._headers
 
-    # @classmethod
-    # def readConfigIni(cls, _configIni, _configKeyType):
-    #     configparser = ConfigParser()
-    #     print("_configKeyType: ", _configKeyType)
-    #     configparser.read(_configIni)
-    #     print("sections: ", config.sections())
-    #     print("new: -> ", configparser[_configKeyType]['MATRIX42_URL'])
-    #     return cls(
-    #         _url = configparser[_configKeyType]['MATRIX42_URL'],
-    #         _api_token=configparser[_configKeyType]['MATRIX42SDK_API_TOKEN']
-    #     )
+    @classmethod
+    def readConfigIni(cls, _configIni, _configKeyType):
+        configparser = ConfigParser()
+        print("_configKeyType: ", _configKeyType)
+        configparser.read(_configIni)
+        print("sections: ", configparser.sections())
+        print("new: -> ", configparser[_configKeyType]['MATRIX42_URL'])
+        return cls(
+            _url = configparser[_configKeyType]['MATRIX42_URL'],
+            _api_token=configparser[_configKeyType]['MATRIX42SDK_API_TOKEN']
+        )
