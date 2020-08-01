@@ -73,6 +73,10 @@ jobs:
     displayName: "Linting: black"
     workingDirectory: $(srcDirectory)
 
+  - task: WhiteSource Bolt@20
+    inputs:
+      cwd: $(srcDirectory)
+
   # Run tests
   - bash: pytest .
     displayName: Run tests
