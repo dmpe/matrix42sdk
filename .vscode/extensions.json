@@ -1,0 +1,23 @@
+{
+    "recommendations": [
+        "bungcip.better-toml",
+        "christian-kohler.path-intellisense",
+        "codezombiech.gitignore",
+        "DotJoshJohnson.xml",
+        "eamodio.gitlens",
+        "EditorConfig.EditorConfig",
+        "formulahendry.auto-close-tag",
+        "formulahendry.code-runner",
+        "foxundermoon.shell-format",
+        "hbenl.vscode-test-explorer",
+        "lextudio.restructuredtext",
+        "littlefoxteam.vscode-python-test-adapter",
+        "mikestead.dotenv",
+        "ms-azure-devops.azure-pipelines",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "njpwerner.autodocstring",
+        "piotrpalarz.vscode-gitignore-generator",
+        "redhat.vscode-yaml",
+    ]
+}

@@ -1,0 +1,145 @@
+# ##########
+#
+# A build resulting in a package upload to Azure Artifacts (private PyPI)
+#
+# We run parallel Jobs to validate our package against multiple Python versions
+# Then we add a new Job to publish to an Artifacts feed after all validation has passed
+#
+# ##########
+
+# Pipeline-level variables
+variables:
+  package: matrix42sdk
+  srcDirectory: src/$(package)
+  testsDirectory: tests/$(package)
+  artifactFeed: my-feed
+  publishedVersion: 3.6
+
+# Trigger only when simple_package or its build has been modified
+trigger:
+  branches:
+    include:
+      - "*"       # Trigger on all branches, but we'll filter to only publish to Artifacts on pushes to master
+  paths:
+    include:
+    - src/matrix42sdk/*
+    - tests/matrix42sdk/*
+
+# Jobs are collections of related steps
+jobs:
+
+# Our initial Job will lint and test our package against multiple Python versions in parallel
+# The name here is significant - we reference it later in the dependsOn property of the Publish job
+- job: Build
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops&tabs=yaml
+  # Strategy pattern to run all steps for multiple versions of Python
+  strategy:
+    matrix:
+      python36:
+        pythonVersion: 3.6 # centos minimum
+      python38:
+        pythonVersion: 3.8 # latest
+  # Run on a Microsoft-hosted agent running Ubuntu-16.04
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops
+  pool:
+    vmImage: ubuntu-latest
+
+  steps:
+
+  # Use a specific Python version
+  - task: UsePythonVersion@0
+    displayName: Use Python $(pythonVersion)
+    inputs:
+      versionSpec: $(pythonVersion)
+
+  - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
+    displayName: update pip and some other basic packages
+
+  - bash: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+    displayName: install poetry
+
+  - bash: poetry config virtualenvs.create false
+    displayName: disable creating virtual environments
+
+  # Install some tools needed for build (pylint, flake8, etc)
+  - bash: poetry install 
+    displayName: Install packages for build
+
+  # Lint via pylint. We need to find all .py files under src/simple_package and run pylint to avoid errors
+  - bash: find $(srcDirectory) $(testsDirectory) -type f -name "*.py" | xargs pylint
+    displayName: "Linting: pylint"
+
+  # Lint via black which has better discovery, so we can invoke it directly
+  - bash: black --config pyproject.toml
+    displayName: "Linting: black"
+    workingDirectory: $(srcDirectory)
+
+  # Run tests
+  - bash: pytest
+    displayName: Run tests
+    workingDirectory: $(testsDirectory)
+
+  # Our built source dist & wheel will land in src/simple_package/dist
+  - bash: poetry build
+    displayName: Build package
+    workingDirectory: $(srcDirectory)
+
+  # Upload everything in src/simple_package/dist (including subfolders) to the build artifacts for later use or debugging
+  # Add pythonVersion to the artifact name to avoid conflicts and ensure we capture all build output
+  - task: PublishPipelineArtifact@0
+    displayName: Publish artifacts
+    inputs:
+      artifactName: dist$(pythonVersion)
+      targetPath: $(srcDirectory)/dist
+
+# If all Build steps for all Python versions have succeeded,
+# we will download one of the already-validated build assets and publish it to an Azure Artifacts feed
+- job: Publish
+
+  # Run on a Microsoft-hosted agent running Ubuntu-16.04
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops
+  pool:
+    vmImage: ubuntu-latest
+
+  # We want to wait for all Build Jobs to complete before running the Publish Job
+  dependsOn: Build
+
+  # Only publish when the previous Jobs are successful and we're building the master branch
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+  # Variables specific to the Publish job
+  variables:
+    artifactName: dist$(publishedVersion)
+    pythonVersion: 3.6
+
+  # Steps are the specific tasks that execute code and do things
+  steps:
+
+  # Explicitly disable source checkout to keep a pristine environment for publishing
+  - checkout: none
+
+  # Download from build artifacts
+  - download: current
+    artifact: $(artifactName)
+
+  # Set the version of Python to use for publishing (which may or may not match the version the package was built with or tested against)
+  - task: UsePythonVersion@0
+    displayName: Use Python $(pythonVersion)
+    inputs:
+      versionSpec: $(pythonVersion)
+  
+  - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
+    displayName: update pip and some other basic packages
+
+  - bash: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+    displayName: install poetry
+
+  - bash: poetry config virtualenvs.create false
+    displayName: disable creating virtual environments
+  
+  - bash: poetry config my-feed $(artifactFeed)
+    displayName: setup private azure repository
+
+  # Upload everything in the dist folder to the private Artifacts feed
+  - bash: poetry publish -n -r my-repository
+    displayName: Publish artifacts
