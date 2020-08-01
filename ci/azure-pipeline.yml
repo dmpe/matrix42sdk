@@ -78,9 +78,9 @@ jobs:
       cwd: $(srcDirectory)
 
   # Run tests
-  - bash: pytest .
-    displayName: Run tests
-    workingDirectory: $(srcDirectory)
+  # - bash: pytest .
+  #   displayName: Run tests
+  #   workingDirectory: $(srcDirectory)
 
   # Our built source dist & wheel will land in src/simple_package/dist
   - bash: poetry build
