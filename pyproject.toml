@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "matrix42sdk"
-version = "2.0.0"
+version = "2.0.1"
 description = "Python SDK for Matrix42 Enterprise Service Management CMBD"
 authors = ["dmpe <cincenko@outlook.com>"]
 license = "MIT"
@@ -15,17 +15,17 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
-requests = "^1.0"
+python = "> 3.6" #minimal
+requests = "*"
+mypy = "*"
 
 [tool.poetry.dev-dependencies]
-mock = "^3.0"
-pytest-cov = "^2.8"
-isort = {extras = ["pyproject"], version = "^4.3.21"}
-black = "^19.10b0"
-mypy = "^0.782"
-pytest = "^5.4.3"
-pylint = "^2.5.3"
+mock = "*"
+isort = {extras = ["pyproject"], version = "*"}
+black = {version = "*", allow-prereleases = true }
+pytest-cov = "*"
+pytest = "*"
+# pylint = "*"
 twine = "*"
 keyring = "*"
 artifacts-keyring = "*"

@@ -10,8 +10,7 @@
 # Pipeline-level variables
 variables:
   package: matrix42sdk
-  srcDirectory: src/$(package)
-  testsDirectory: tests/$(package)
+  srcDirectory: $(Build.SourcesDirectory)
   artifactFeed: my-feed
   publishedVersion: 3.6
 
@@ -22,8 +21,8 @@ trigger:
       - "*"       # Trigger on all branches, but we'll filter to only publish to Artifacts on pushes to master
   paths:
     include:
-    - src/matrix42sdk/*
-    - tests/matrix42sdk/*
+    - matrix42sdk/*
+    - matrix42sdk/tests
 
 # Jobs are collections of related steps
 jobs:
@@ -52,45 +51,58 @@ jobs:
     inputs:
       versionSpec: $(pythonVersion)
 
-  - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
+  - bash: pip3 install pip wheel setuptools keyring artifacts-keyring --upgrade
     displayName: update pip and some other basic packages
 
-  - bash: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+  - bash: pip3 install poetry
     displayName: install poetry
 
   - bash: poetry config virtualenvs.create false
     displayName: disable creating virtual environments
 
   # Install some tools needed for build (pylint, flake8, etc)
-  - bash: poetry install 
+  - bash: poetry install
     displayName: Install packages for build
 
   # Lint via pylint. We need to find all .py files under src/simple_package and run pylint to avoid errors
-  - bash: find $(srcDirectory) $(testsDirectory) -type f -name "*.py" | xargs pylint
-    displayName: "Linting: pylint"
+  # - bash: pylint $(package)
+  #   displayName: "Linting: pylint"
 
   # Lint via black which has better discovery, so we can invoke it directly
-  - bash: black --config pyproject.toml
+  - bash: black .
     displayName: "Linting: black"
     workingDirectory: $(srcDirectory)
 
   # Run tests
-  - bash: pytest
-    displayName: Run tests
-    workingDirectory: $(testsDirectory)
+  # - bash: pytest .
+  #   displayName: Run tests
+  #   workingDirectory: $(srcDirectory)
 
   # Our built source dist & wheel will land in src/simple_package/dist
-  - bash: poetry build
+  - bash: poetry build -vv -n
     displayName: Build package
     workingDirectory: $(srcDirectory)
 
-  # Upload everything in src/simple_package/dist (including subfolders) to the build artifacts for later use or debugging
-  # Add pythonVersion to the artifact name to avoid conflicts and ensure we capture all build output
-  - task: PublishPipelineArtifact@0
-    displayName: Publish artifacts
+  - task: TwineAuthenticate@1
     inputs:
-      artifactName: dist$(pythonVersion)
-      targetPath: $(srcDirectory)/dist
+      artifactFeed: 'Matrix42SDK/my-feed'
+
+  - bash: twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
+    displayName: Publish artifacts
+
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'SonarCloud'
+      organization: 'dmpe-github'
+      scannerMode: 'CLI'
+      configMode: 'file'
+      configFile: '.sonarcloud.properties'
+
+  - task: SonarCloudAnalyze@1
+
+  - task: WhiteSource Bolt@20
+    inputs:
+      cwd: '$(srcDirectory)'
 
 # If all Build steps for all Python versions have succeeded,
 # we will download one of the already-validated build assets and publish it to an Azure Artifacts feed
@@ -109,7 +121,6 @@ jobs:
 
   # Variables specific to the Publish job
   variables:
-    artifactName: dist$(publishedVersion)
     pythonVersion: 3.6
 
   # Steps are the specific tasks that execute code and do things
@@ -118,28 +129,23 @@ jobs:
   # Explicitly disable source checkout to keep a pristine environment for publishing
   - checkout: none
 
-  # Download from build artifacts
-  - download: current
-    artifact: $(artifactName)
-
   # Set the version of Python to use for publishing (which may or may not match the version the package was built with or tested against)
   - task: UsePythonVersion@0
     displayName: Use Python $(pythonVersion)
     inputs:
       versionSpec: $(pythonVersion)
-  
-  - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
-    displayName: update pip and some other basic packages
 
-  - bash: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
-    displayName: install poetry
+  - task: GitHubRelease@1
+    inputs:
+      gitHubConnection: 'github.com_dmpe'
+      repositoryName: 'dmpe/matrix42sdk'
+      action: 'create'
+      target: '$(Build.SourceVersion)'
+      tagSource: 'gitTag'
+      title: 'New Release'
+      releaseNotesSource: 'inline'
+      releaseNotesInline: 'New released published in https://dev.azure.com/johnmalc/Matrix42SDK/_packaging?_a=feed&feed=my-feed'
+      isPreRelease: true
+      changeLogCompareToRelease: 'lastNonDraftRelease'
+      changeLogType: 'commitBased'
 
-  - bash: poetry config virtualenvs.create false
-    displayName: disable creating virtual environments
-  
-  - bash: poetry config my-feed $(artifactFeed)
-    displayName: setup private azure repository
-
-  # Upload everything in the dist folder to the private Artifacts feed
-  - bash: poetry publish -n -r my-repository
-    displayName: Publish artifacts

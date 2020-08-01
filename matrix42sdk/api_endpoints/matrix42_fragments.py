@@ -1,7 +1,5 @@
 import json
-import os
 import requests
-import sys
 from matrix42sdk.AuthNClient import *
 
 
