@@ -52,14 +52,14 @@ jobs:
     inputs:
       versionSpec: $(pythonVersion)
 
-  - bash: python3 -m pip install pip wheel setuptools keyring artifacts-keyring --upgrade
+  - bash: pip3 install pip wheel black setuptools keyring artifacts-keyring --upgrade
     displayName: update pip and some other basic packages
 
   - bash: pip3 install poetry
     displayName: install poetry
 
-  - bash: poetry config virtualenvs.create false
-    displayName: disable creating virtual environments
+  # - bash: poetry config virtualenvs.create false
+  #   displayName: disable creating virtual environments
 
   # Install some tools needed for build (pylint, flake8, etc)
   - bash: poetry install
