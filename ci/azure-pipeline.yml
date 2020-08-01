@@ -73,10 +73,6 @@ jobs:
     displayName: "Linting: black"
     workingDirectory: $(srcDirectory)
 
-  - task: WhiteSource Bolt@20
-    inputs:
-      cwd: '$(srcDirectory)'
-
   # Run tests
   # - bash: pytest .
   #   displayName: Run tests
@@ -91,7 +87,7 @@ jobs:
     inputs:
       artifactFeed: 'Matrix42SDK/my-feed'
 
-  - bash: twine upload --config-file $(srcDirectory)/.pypirc -r my-feed dist/*
+  - bash: twine upload --config-file $(srcDirectory)/.pypirc --non-interactive -r my-feed dist/*
     displayName: Publish artifacts
 
   # Upload everything in src/simple_package/dist (including subfolders) to the build artifacts for later use or debugging
@@ -112,6 +108,9 @@ jobs:
 
   - task: SonarCloudAnalyze@1
 
+  - task: WhiteSource Bolt@20
+    inputs:
+      cwd: '$(srcDirectory)'
 
 # If all Build steps for all Python versions have succeeded,
 # we will download one of the already-validated build assets and publish it to an Azure Artifacts feed
@@ -162,6 +161,6 @@ jobs:
     inputs:
       artifactFeed: 'Matrix42SDK/my-feed'
 
-  - bash: twine upload -r my-feed dist/*
+  - bash: twine upload --config-file $(srcDirectory)/.pypirc --non-interactive -r my-feed dist/*
     displayName: Publish artifacts
 
