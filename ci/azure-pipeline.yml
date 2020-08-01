@@ -92,6 +92,10 @@ jobs:
       artifactName: dist$(pythonVersion)
       targetPath: $(srcDirectory)/dist
 
+  - task: TwineAuthenticate@1
+    inputs:
+      artifactFeed: 'Matrix42SDK/my-feed'
+
 # If all Build steps for all Python versions have succeeded,
 # we will download one of the already-validated build assets and publish it to an Azure Artifacts feed
 - job: Publish
@@ -143,3 +147,4 @@ jobs:
   # Upload everything in the dist folder to the private Artifacts feed
   - bash: poetry publish -n -r my-repository
     displayName: Publish artifacts
+
