@@ -10,8 +10,8 @@
 # Pipeline-level variables
 variables:
   package: matrix42sdk
-  srcDirectory: src/$(package)
-  testsDirectory: tests/$(package)
+  srcDirectory: $(package)
+  testsDirectory: $(package)/tests
   artifactFeed: my-feed
   publishedVersion: 3.6
 
@@ -66,11 +66,11 @@ jobs:
     displayName: Install packages for build
 
   # Lint via pylint. We need to find all .py files under src/simple_package and run pylint to avoid errors
-  - bash: find $(srcDirectory) $(testsDirectory) -type f -name "*.py" | xargs pylint
+  - bash: pylint $(package)
     displayName: "Linting: pylint"
 
   # Lint via black which has better discovery, so we can invoke it directly
-  - bash: black --config pyproject.toml
+  - bash: black . --config pyproject.toml
     displayName: "Linting: black"
     workingDirectory: $(srcDirectory)
 

@@ -17,12 +17,12 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "> 3.6" #minimal
 requests = "*"
-black = {version = "*", allows-prereleases = true }
 mypy = "*"
 
 [tool.poetry.dev-dependencies]
 mock = "*"
 isort = {extras = ["pyproject"], version = "*"}
+black = {version = "*", allow-prereleases = true }
 pytest-cov = "*"
 pytest = "*"
 pylint = "*"
