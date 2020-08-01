@@ -10,8 +10,7 @@
 # Pipeline-level variables
 variables:
   package: matrix42sdk
-  srcDirectory: $(package)
-  testsDirectory: $(package)/tests
+  srcDirectory: $(Build.SourcesDirectory)
   artifactFeed: my-feed
   publishedVersion: 3.6
 
@@ -22,8 +21,8 @@ trigger:
       - "*"       # Trigger on all branches, but we'll filter to only publish to Artifacts on pushes to master
   paths:
     include:
-    - src/matrix42sdk/*
-    - tests/matrix42sdk/*
+    - matrix42sdk/*
+    - matrix42sdk/tests
 
 # Jobs are collections of related steps
 jobs:
@@ -70,14 +69,14 @@ jobs:
   #   displayName: "Linting: pylint"
 
   # Lint via black which has better discovery, so we can invoke it directly
-  - bash: black . --config pyproject.toml
+  - bash: black .
     displayName: "Linting: black"
     workingDirectory: $(srcDirectory)
 
   # Run tests
-  - bash: pytest
+  - bash: pytest .
     displayName: Run tests
-    workingDirectory: $(testsDirectory)
+    workingDirectory: $(srcDirectory)
 
   # Our built source dist & wheel will land in src/simple_package/dist
   - bash: poetry build
