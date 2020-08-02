@@ -1,0 +1,90 @@
+import json
+import requests
+from matrix42sdk.AuthNClient import *
+
+
+class FragmentsDataService(RestClient):
+    def __init__(self, _path=None, _full_header=None, **kwargs):
+        super().__init__(**kwargs)
+        self._path = "/M42Services/api/data/fragments"
+        self._full_header = self.get_matrix42_access_header()
+        # print(self._full_header)
+
+    @property
+    def path(self):
+        return self._path
+
+    @path.setter
+    def path(self, value):
+        self._path = value
+
+    def get_fragment(self, ddname, fragmentid):
+        """Reads the whole Fragment of the specified Data Definition with defined Id.
+
+        Returns the JSON object with all attributes specified in the Data Definition.
+        The Service returns null if the fragment with the specified fragmentId does not exist,
+        or the Object the Fragment belongs to, is not allowed for the caller.
+
+        :param ddname: The technical name of the Data Definition (e.g. SPSActivityClassBase)
+        :type ddname str:
+        :param fragmentid: Id of the Fragment of specified Data Definition
+        :type fragmentid str:
+
+        `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_Fragment_data>`_
+
+        """
+        # full=true is important for getting complete object, including version
+        req_url = self.url + self.path + "/%s/%s?full=true" % (ddname, fragmentid)
+        r_ci = requests.get(req_url, verify=self._ssl_verify, headers=self._full_header)
+        r_ci.status_code
+        return json.loads(r_ci.text)
+
+    def get_fragment_list(self, ddname):
+        """Retrieves a list of fragments with a defined list of columns, which match the specified search criteria.
+
+        Retrieves a list of fragments with a defined list of columns which match the specified
+        search criteria and are sorted in the defined order. In case of need, the method returns
+        the schema metadata for the returned data.
+
+        `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_a_list_of_Fragments>`_
+
+        """
+        req_url = self.url + self.path + "/%s/%s?full=true" % ddname
+        r_ci = requests.get(req_url, verify=self._ssl_verify, headers=self._full_header)
+
+
+    def create_fragement(self, ddname, jsonBody):
+        """Create method
+
+        Do not use, untested
+        """
+        # true => full update | must be same in the get method
+        put_url = self.url + self.path + "/%s?full=true" % ddname
+        print(put_url)
+
+        r_ci_update = requests.post(
+            put_url, verify=False, headers=self._full_header, data=jsonBody
+        )
+        print(r_ci_update)
+        if r_ci_update.status_code != 500:
+            print("Update of CI fragment has been ok")
+
+        return r_ci_update
+
+    def update_fragement(self, ddname, jsonBody):
+        """Updates the specified Data Definition fragment attributes.
+
+        The Service modifies only attributes which are explicitly specified in the Request Body.
+        The attributes which are not mentioned in the request are not affected by the Update operation.
+        """
+        # true => full update | must be same in the get method
+        put_url = self.url + self.path + "/%s?full=true" % ddname
+        print(put_url)
+
+        r_ci_update = requests.put(
+            put_url, verify=self._ssl_verify, headers=self._full_header, data=jsonBody
+        )
+        print(r_ci_update)
+        if r_ci_update.status_code != 500:
+            print("Update of CI fragment has been ok")
+

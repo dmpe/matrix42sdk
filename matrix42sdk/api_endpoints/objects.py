@@ -3,7 +3,7 @@ import requests
 from matrix42sdk.AuthNClient import *
 
 
-class GDSObjects(RestClient):
+class ObjectsDataService(RestClient):
     def __init__(self, _path=None, _full_header=None, **kwargs):
         super().__init__(**kwargs)
         self._path = "/M42Services/api/data/objects"
