@@ -17,7 +17,7 @@ class RestClient(object):
     Args:
         hostname (str): Full URL of ESM server, e.g. "https://matrix.firm.com"
         api_token (str): Generated API Token in ESM GUI, to be used for getting Access Token
-        ssl_verify (bool|str): Requests' parameter for wherther TLS is being checked. Use if hosted using
+        ssl_verify (bool): Requests' parameter for wherther TLS is being checked. Use if hosted using
         Self-Signed Certificates
     """
 
