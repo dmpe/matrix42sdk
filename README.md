@@ -18,7 +18,7 @@
 
 ## The background story
 
-As of July 2020, Matrix42 AG, a German company is offering a [Configuration Management Database (CMBD)](https://www.matrix42.com/en/digital-workspace-management/enterprise-service-management) - basically a competing product to ServiceNOW and many others like Micrsoft Intune.
+As of July 2020, Matrix42 AG, a German company is offering a [Configuration Management Database (CMBD)](https://www.matrix42.com/en/digital-workspace-management/enterprise-service-management) - basically a competing product to ServiceNOW and many others like Microsoft Intune.
 
 Their Angular based product can be installed on-prem and used as ITIL supporting tool for the company.
 
