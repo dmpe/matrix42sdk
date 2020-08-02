@@ -1,10 +1,19 @@
 import json
 import requests
 from requests.exceptions import HTTPError
-from matrix42sdk.AuthNClient import *
+from matrix42sdk.AuthNClient import RestClient
 
 
 class FragmentsDataService(RestClient):
+    """Fragments (/api/data/fragments), provides the operation for working with the Fragments (Instances of the Data Definitions)
+
+    The Service provides methods for CRUD operations (Create-Read-Update-Delete) for Data Definitions presented in the Schema.
+
+    Args:
+        RestClient ([type]): Inherit RestClient object
+
+    `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/API%3A_Generic_Data_Service>`_
+    """
     def __init__(self, _path=None, _full_header=None, **kwargs):
         super().__init__(**kwargs)
         self._path = "/M42Services/api/data/fragments"

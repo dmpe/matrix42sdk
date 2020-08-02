@@ -1,14 +1,23 @@
 import json
 import requests
-from matrix42sdk.AuthNClient import *
+from matrix42sdk.AuthNClient import RestClient
 
 
 class ObjectsDataService(RestClient):
+    """Objects (/api/data/objects) which addresses operations with the Objects (instances of the Configuration Items)
+
+    The Service provides methods for CRUD operations (Create-Read-Update-Delete) for Configuration Items presented in the Schema.
+
+    Args:
+        RestClient ([type]): Inherit RestClient object
+
+    `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/API%3A_Generic_Data_Service>`_
+    """
+
     def __init__(self, _path=None, _full_header=None, **kwargs):
         super().__init__(**kwargs)
         self._path = "/M42Services/api/data/objects"
         self._full_header = self.get_matrix42_access_header()
-
         # print(self._full_header)
 
     @property
@@ -29,10 +38,8 @@ class ObjectsDataService(RestClient):
         """
         # full=true is important for getting complete object, including version
         req_url = self.url + self.path + "/%s/%s?full=true" % (entity, objectid)
-        # print("Request URL for CI -> ", req_url)
         r_ci = requests.get(req_url, verify=self._ssl_verify, headers=self._full_header)
         r_ci.status_code
-        # print(r_ci.text)
         return json.loads(r_ci.text)
 
     def update_object(self, entity, jsonBody):
