@@ -142,8 +142,8 @@ class RestClient(object):
         print("_configKeyType: ", _configKeyType)
         configparser.read(_configIni)
         print("sections: ", configparser.sections())
-        print("new: -> ", configparser[_configKeyType]['MATRIX42_URL'])
+        print("new: -> ", configparser[_configKeyType]["MATRIX42_URL"])
         return cls(
-            _url = configparser[_configKeyType]['MATRIX42_URL'],
-            _api_token=configparser[_configKeyType]['MATRIX42SDK_API_TOKEN']
+            _url=configparser[_configKeyType]["MATRIX42_URL"],
+            _api_token=configparser[_configKeyType]["MATRIX42SDK_API_TOKEN"],
         )

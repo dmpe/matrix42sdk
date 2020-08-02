@@ -1,7 +1,7 @@
 import json
 import requests
-from requests.exceptions import HTTPError
 from matrix42sdk.AuthNClient import RestClient
+from requests.exceptions import HTTPError
 
 
 class FragmentsDataService(RestClient):
@@ -14,6 +14,7 @@ class FragmentsDataService(RestClient):
 
     `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/API%3A_Generic_Data_Service>`_
     """
+
     def __init__(self, _path=None, _full_header=None, **kwargs):
         super().__init__(**kwargs)
         self._path = "/M42Services/api/data/fragments"
@@ -49,19 +50,31 @@ class FragmentsDataService(RestClient):
         # full=true is important for getting complete object, including version
         req_url = self.url + self.path + "/%s/%s?full=true" % (ddname, fragmentId)
         try:
-            r_ci = requests.get(req_url, verify=self._ssl_verify, headers=self._full_header)
+            r_ci = requests.get(
+                req_url, verify=self._ssl_verify, headers=self._full_header
+            )
             r_ci.raise_for_status()
             return json.loads(r_ci.text)
 
         except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')
+            print(f"HTTP error occurred: {http_err}")
 
         except Exception as err:
-            print(f'Other error occurred: {err}')
+            print(f"Other error occurred: {err}")
 
     # https://docs.python.org/3/tutorial/controlflow.html#special-parameters
     # only allows keyword arguments as indicated
-    def get_fragments_list(self, ddname, *, where = None, columns = None, pageSize = None, pageNumber = None, sort = None, includeLocalizations = None):
+    def get_fragments_list(
+        self,
+        ddname,
+        *,
+        where=None,
+        columns=None,
+        pageSize=None,
+        pageNumber=None,
+        sort=None,
+        includeLocalizations=None,
+    ):
         """Retrieves a list of fragments with a defined list of columns, which match the specified search criteria.
 
         Returns:
@@ -102,28 +115,33 @@ class FragmentsDataService(RestClient):
 
         payload = dict()
         if where is not None:
-            payload.update({"where":where})
+            payload.update({"where": where})
         if columns is not None:
-            payload.update({"columns":columns})
+            payload.update({"columns": columns})
         if pageSize is not None:
-            payload.update({"pageSize":pageSize})
+            payload.update({"pageSize": pageSize})
         if pageNumber is not None:
-            payload.update({"pageNumber":pageNumber})
+            payload.update({"pageNumber": pageNumber})
         if sort is not None:
-            payload.update({"sort":sort})
+            payload.update({"sort": sort})
         if includeLocalizations is not None:
-            payload.update({"includeLocalizations":includeLocalizations})
+            payload.update({"includeLocalizations": includeLocalizations})
 
         try:
-            r_ci_list = requests.get(req_url, params = payload, verify=self._ssl_verify, headers=self._full_header)
+            r_ci_list = requests.get(
+                req_url,
+                params=payload,
+                verify=self._ssl_verify,
+                headers=self._full_header,
+            )
             r_ci_list.raise_for_status()
             return json.loads(r_ci_list.text)
 
         except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')
+            print(f"HTTP error occurred: {http_err}")
 
         except Exception as err:
-            print(f'Other error occurred: {err}')
+            print(f"Other error occurred: {err}")
 
     def create_fragment(self, ddname, jsonBody):
         """Creates a new Data Definition fragment. The operation is required for cases of multi-fragments or optional fragments.
@@ -151,10 +169,10 @@ class FragmentsDataService(RestClient):
             return r_ci_create
 
         except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')
+            print(f"HTTP error occurred: {http_err}")
 
         except Exception as err:
-            print(f'Other error occurred: {err}')
+            print(f"Other error occurred: {err}")
 
     def update_fragment(self, ddname, jsonBody):
         """Updates the specified Data Definition fragment attributes.
@@ -192,10 +210,10 @@ class FragmentsDataService(RestClient):
             return r_ci_update
 
         except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')
+            print(f"HTTP error occurred: {http_err}")
 
         except Exception as err:
-            print(f'Other error occurred: {err}')
+            print(f"Other error occurred: {err}")
 
     def add_fragment_relation(self, ddname, fragmentId, relationName, relationFragmentId):
         """Adds relation to the Database defined by Data Definition name, fragment ID and Relation name.
@@ -220,15 +238,20 @@ class FragmentsDataService(RestClient):
         `Matrix42 URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Add_Fragment_Relation>`_
 
         """
-        req_url = self.url + self.path + "/%s/%s/%s/%s" % (ddname, fragmentId, relationName, relationFragmentId)
+        req_url = (
+            self.url
+            + self.path
+            + "/%s/%s/%s/%s" % (ddname, fragmentId, relationName, relationFragmentId)
+        )
         try:
-            r_ci_add_rel = requests.get(req_url, verify=self._ssl_verify, headers=self._full_header)
+            r_ci_add_rel = requests.get(
+                req_url, verify=self._ssl_verify, headers=self._full_header
+            )
             r_ci_add_rel.raise_for_status()
             return r_ci_add_rel
 
         except HTTPError as http_err:
-            print(f'HTTP error occurred: {http_err}')
+            print(f"HTTP error occurred: {http_err}")
 
         except Exception as err:
-            print(f'Other error occurred: {err}')
-
+            print(f"Other error occurred: {err}")
