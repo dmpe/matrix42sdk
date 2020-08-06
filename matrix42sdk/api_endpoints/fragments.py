@@ -171,7 +171,6 @@ class FragmentsDataService(RestClient):
         except Exception as err:
             print(f"Other error occurred: {err}")
 
-
     def get_fragment_relations_list(
         self,
         ddname,
@@ -330,7 +329,9 @@ class FragmentsDataService(RestClient):
         except Exception as err:
             print(f"Other error occurred: {err}")
 
-    def delete_fragment_relation(self, ddname, fragmentId, relationName, relationFragmentId):
+    def delete_fragment_relation(
+        self, ddname, fragmentId, relationName, relationFragmentId
+    ):
         """Deletes the relation from Database defined by Data Definition name, fragment ID and Relation name.
 
         The operation is required for managing many-to-many relations.
