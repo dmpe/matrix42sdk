@@ -18,16 +18,16 @@ classifiers = [
 python = "^3" #minimal
 requests = "*"
 mypy = "*"
-
-[tool.poetry.dev-dependencies]
-mock = "*"
-isort = {extras = ["pyproject"], version = "*"}
-black = {version = "*", allow-prereleases = true }
-pytest-cov = "*"
 pytest = "*"
+
+#[tool.poetry.dev-dependencies]
+#mock = "*"
+#isort = {extras = ["pyproject"], version = "*"}
+#black = {version = "*", allow-prereleases = true }
+#pytest-cov = "*"
 # pylint = "*"
-keyring = "*"
-artifacts-keyring = "*"
+#keyring = "*"
+#artifacts-keyring = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]
