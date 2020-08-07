@@ -36,8 +36,6 @@ jobs:
     matrix:
       python36:
         pythonVersion: 3.6 # centos minimum
-      python38:
-        pythonVersion: 3.8 # latest
   # Run on a Microsoft-hosted agent running Ubuntu-16.04
   # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops
   pool:

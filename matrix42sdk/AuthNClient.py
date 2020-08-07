@@ -17,7 +17,7 @@ class RestClient(object):
     Args:
         hostname (str): Full URL of ESM server, e.g. "https://matrix.firm.com"
         api_token (str): Generated API Token in ESM GUI, to be used for getting Access Token
-        ssl_verify (bool|str): Requests' parameter for wherther TLS is being checked. Use if hosted using
+        ssl_verify (bool): Requests' parameter for wherther TLS is being checked. Use if hosted using
         Self-Signed Certificates
     """
 
@@ -142,8 +142,8 @@ class RestClient(object):
         print("_configKeyType: ", _configKeyType)
         configparser.read(_configIni)
         print("sections: ", configparser.sections())
-        print("new: -> ", configparser[_configKeyType]['MATRIX42_URL'])
+        print("new: -> ", configparser[_configKeyType]["MATRIX42_URL"])
         return cls(
-            _url = configparser[_configKeyType]['MATRIX42_URL'],
-            _api_token=configparser[_configKeyType]['MATRIX42SDK_API_TOKEN']
+            _url=configparser[_configKeyType]["MATRIX42_URL"],
+            _api_token=configparser[_configKeyType]["MATRIX42SDK_API_TOKEN"],
         )
