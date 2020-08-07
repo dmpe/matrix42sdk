@@ -26,7 +26,6 @@ black = {version = "*", allow-prereleases = true }
 pytest-cov = "*"
 pytest = "*"
 # pylint = "*"
-twine = "*"
 keyring = "*"
 artifacts-keyring = "*"
 
