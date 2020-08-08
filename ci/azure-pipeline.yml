@@ -85,7 +85,7 @@ jobs:
     inputs:
       artifactFeed: 'Matrix42SDK/my-feed'
 
-  - bash: twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
+  - bash: pip3 install twine && twine upload --config-file $(PYPIRC_PATH) --non-interactive -r my-feed dist/*
     displayName: Publish artifacts
 
   - task: SonarCloudPrepare@1
