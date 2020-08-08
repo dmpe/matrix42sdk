@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "matrix42sdk"
-version = "2.2.5"
+version = "2.2.6"
 description = "Python SDK for Matrix42 Enterprise Service Management CMBD"
 authors = ["John Malc <cincenko@outlook.com>"]
 license = "MIT"
