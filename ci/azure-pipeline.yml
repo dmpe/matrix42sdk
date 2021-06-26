@@ -23,6 +23,7 @@ trigger:
     include:
     - matrix42sdk/*
     - matrix42sdk/tests
+    - ci/*
 
 # Jobs are collections of related steps
 jobs:
