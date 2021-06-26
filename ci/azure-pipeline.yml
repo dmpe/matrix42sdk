@@ -12,7 +12,7 @@ variables:
   package: matrix42sdk
   srcDirectory: $(Build.SourcesDirectory)
   artifactFeed: my-feed
-  publishedVersion: 3.6
+  publishedVersion: 3.8
 
 # Trigger only when simple_package or its build has been modified
 trigger:
@@ -35,8 +35,7 @@ jobs:
   strategy:
     matrix:
       python36:
-        pythonVersion: 3.6 # centos minimum
-  # Run on a Microsoft-hosted agent running Ubuntu-16.04
+        pythonVersion: $(publishedVersion) # centos minimum
   # https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops
   pool:
     vmImage: ubuntu-latest
@@ -95,7 +94,6 @@ jobs:
       scannerMode: 'CLI'
       configMode: 'file'
       configFile: '.sonarcloud.properties'
-
   - task: SonarCloudAnalyze@1
 
   - task: WhiteSource Bolt@20
@@ -119,7 +117,7 @@ jobs:
 
   # Variables specific to the Publish job
   variables:
-    pythonVersion: 3.6
+    pythonVersion: $(publishedVersion)
 
   # Steps are the specific tasks that execute code and do things
   steps:
