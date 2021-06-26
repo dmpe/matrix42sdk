@@ -4,4 +4,5 @@ class APIKeyMissingError(Exception):
     Args:
         Exception ([type]): [description]
     """
+
     pass

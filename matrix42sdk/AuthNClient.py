@@ -1,11 +1,8 @@
 import os
 import requests
-import urllib3
 from configparser import ConfigParser
 from matrix42sdk.Exceptions import APIKeyMissingError
 
-
-urllib3.disable_warnings()
 MATRIX42_GENERATE_ACCESS_TOKEN_ENDPOINT = (
     "/m42Services/api/ApiToken/GenerateAccessTokenFromApiToken/"
 )
