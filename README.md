@@ -148,6 +148,8 @@ pip3 install --index https://pkgs.dev.azure.com/johnmalc/Matrix42SDK/_packaging/
 
 ## Documentation
 
+We use <https://sphinx-rtd-theme.readthedocs.io/> and <https://www.sphinx-doc.org/en/master/>
+
 ```
 cd docs
 sphinx-apidoc -o source ../matrix42sdk
