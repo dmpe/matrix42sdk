@@ -1,16 +1,16 @@
 import json
 import requests
-from matrix42sdk.AuthNClient import RestClient
+from matrix42sdk.AuthNClient import Matrix42RestClient
 from requests.exceptions import HTTPError
 
 
-class ObjectsDataService(RestClient):
+class ObjectsDataService(Matrix42RestClient):
     """Objects (/api/data/objects) which addresses operations with the Objects (instances of the Configuration Items)
 
     The Service provides methods for CRUD operations (Create-Read-Update-Delete) for Configuration Items presented in the Schema.
 
     Args:
-        RestClient ([type]): Inherit RestClient object
+        Matrix42RestClient ([type]): Inherit Matrix42RestClient object
 
     `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/API%3A_Generic_Data_Service>`_
     """
@@ -62,7 +62,7 @@ class ObjectsDataService(RestClient):
             )
             r_ci_get.raise_for_status()
 
-            if r_ci_get.status_code == 400:
+            if r_ci_get.status_code == 404:
                 return Exception(
                     "The object with the specified Configuration Item and Object ID is not present, or not allowed for the caller."
                 )
@@ -171,9 +171,9 @@ class ObjectsDataService(RestClient):
             objectId (str):
                 Required. Id of the Object of specified Configuration Item
 
-        `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Object_Data_Service%3A_Create_Object>`_
+        `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Objects_Data_Service%3A_Delete_Object>`_
         """
-        put_url = self.url + self.path + "/%s" % ciName
+        put_url = self.url + self.path + "/%s/%s" % (ciName, objectId)
         try:
 
             r_ci_delete = requests.delete(

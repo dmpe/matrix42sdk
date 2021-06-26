@@ -1,16 +1,16 @@
 import json
 import requests
-from matrix42sdk.AuthNClient import RestClient
+from matrix42sdk.AuthNClient import Matrix42RestClient
 from requests.exceptions import HTTPError
 
 
-class FragmentsDataService(RestClient):
+class FragmentsDataService(Matrix42RestClient):
     """Fragments (/api/data/fragments), provides the operation for working with the Fragments (Instances of the Data Definitions)
 
     The Service provides methods for CRUD operations (Create-Read-Update-Delete) for Data Definitions presented in the Schema.
 
     Args:
-        RestClient ([type]): Inherit RestClient object
+        Matrix42RestClient ([type]): Inherit Matrix42RestClient object
 
     `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/API%3A_Generic_Data_Service>`_
     """
@@ -19,7 +19,6 @@ class FragmentsDataService(RestClient):
         super().__init__(**kwargs)
         self._path = "/M42Services/api/data/fragments"
         self._full_header = self.get_matrix42_access_header()
-        # print(self._full_header)
 
     @property
     def path(self):
@@ -72,7 +71,7 @@ class FragmentsDataService(RestClient):
             fragmentId (str):
                 Id of the Fragment of specified Data Definition
 
-        `Matrix42 URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_Fragment_data>`_
+        `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_Fragment_data>`_
 
         """
         # full=true is important for getting complete object, including version
@@ -257,13 +256,13 @@ class FragmentsDataService(RestClient):
         except Exception as err:
             print(f"Other error occurred: {err}")
 
-    def create_fragment(self, ddname, jsonBody):
+    def create_fragment(self, ddname, fragmentData):
         """Creates a new Data Definition fragment. The operation is required for cases of multi-fragments or optional fragments.
 
         Args:
             ddname (str):
                 Required. The technical name of the Data Definition (e.g. SPSActivityClassBase)
-            jsonBody: (json)
+            fragmentData: (json)
                 Request Body with a JSON containing all necessary data for Fragment creation.
                 For JSON  structure examples see  Fragments Data Service: Get Fragment page.
 
@@ -277,7 +276,7 @@ class FragmentsDataService(RestClient):
         put_url = self.url + self.path + "/%s" % ddname
         try:
             r_ci_create = requests.post(
-                put_url, verify=self._ssl_verify, headers=self._full_header, data=jsonBody
+                put_url, verify=self._ssl_verify, headers=self._full_header, data=fragmentData
             )
             r_ci_create.raise_for_status()
             return r_ci_create
@@ -390,7 +389,7 @@ class FragmentsDataService(RestClient):
             relationFragmentId (str):
                 Id of the Data Definition's fragment that is added as a relation.
 
-        `Matrix42 URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Add_Fragment_Relation>`_
+        `URL <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Add_Fragment_Relation>`_
 
         """
         req_url = (

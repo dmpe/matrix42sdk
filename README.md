@@ -35,39 +35,8 @@ It shows - also due to learning Python OOP principles.
 - <https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Web_Services_tokens%3A_Generate_API_Token> Generate API Token
 
 Setting up the Sphinx auto-generate documentation:
+
 - <https://samnicholls.net/2016/06/15/how-to-sphinx-readthedocs/>
-
-# Matrix42 SDK for Python
-
-To use Matrix42 SDK, first decide which authN approach you are going to use.
-
-For a **basic**, create a client object by using your (or any other matrix42 CMBD) account:
-
-```{python}
-import matrix42sdk
-from matrix42sdk import AuthNClient
-from matrix42sdk.api_endpoints import matrix42_objects, matrix42_fragments
-```
-
-For using Access/API Token, you can either set your MATRIX42SDK_API_TOKEN via a shell (**higher priority**):
-
-```{shell}
-export MATRIX42_URL="xxx"
-export MATRIX42SDK_API_TOKEN="xxx"
-```
-and then:
-
-```{python3}
-mat = matrix42_fragments.GDSFragements()
-```
-
-Then to [get a fragment for a specific CI](https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_Fragment_data), insert correct parameters according to the documentation:
-
-```
-JUPYTERLAB_ID_FRAG = "8c51cfff-bf16-452e-8d2c-527cc25518c3"
-SYS_ENTITY = "SPSSoftwareType"
-full_ci_frg = mat.get_fragement(SYS_FRAGEMENT, JUPYTERLAB_ID_FRAG)
-```
 
 # What works and what does not?
 
@@ -84,17 +53,18 @@ Semi/or not working:
 - creating fragment was not tested, but is implemented as a Rest API call
 - get and put object -> here not tested extensively and one must expect bugs
 
-
 # Testing
 
-Without having a Matrix42 ESM portal which allows API access and is publicly available for unlimited use, the only option how to test this library is
-to use **your** own ESM portal installation (be it in public cloud or on prem).
+Without having a Matrix42 ESM portal which allows API access and is publicly available for unlimited use,
+the only option how to test this library is to use **your** own ESM portal installation (be it in public cloud or on prem).
 Hence the need to use your own API keys, etc.
 
 From this follows that this library cannot - as of now - include more python tests, at least not publicly available.
 It is my recommendation to write your `own, private tests` and report issues here.
 
 Sorry for inconvenience!
+
+# Usage
 
 ## Python 3 - Simple Testing
 
@@ -129,6 +99,48 @@ response = requests.request("GET", url, headers=headers, data = payload)
 
 print(response.text.encode('utf8'))
 ```
+## Matrix42 SDK for Python
+
+To use Matrix42 SDK, first decide which authN approach you are going to use.
+
+For a **basic**, create a `Matrix42RestClient` object by using your (or any other matrix42 CMBD) account:
+
+```{python}
+import matrix42sdk
+from matrix42sdk import AuthNClient
+from matrix42sdk.api_endpoints import matrix42_objects, matrix42_fragments
+```
+
+For using `Access/API Tokens`, you can set your `MATRIX42SDK_API_TOKEN` via a shell (**higher priority**):
+
+```{shell}
+export MATRIX42_URL="xxx"
+export MATRIX42SDK_API_TOKEN="xxx"
+```
+
+and then:
+
+```{python3}
+mat = matrix42_fragments.GDSFragements()
+```
+
+Then to [get a fragment for a specific CI](https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_Fragment_data), insert correct parameters according to the documentation:
+
+```
+JUPYTERLAB_ID_FRAG = "8c51cfff-bf16-452e-8d2c-527cc25518c3"
+SYS_ENTITY = "SPSSoftwareType"
+full_ci_frg = mat.get_fragement(SYS_FRAGEMENT, JUPYTERLAB_ID_FRAG)
+```
+
+## Documentation
+
+We use <https://sphinx-rtd-theme.readthedocs.io/> and <https://www.sphinx-doc.org/en/master/>
+
+```
+cd docs
+sphinx-apidoc -o source ../matrix42sdk
+make html
+```
 
 # Building this package yourself
 
@@ -146,12 +158,8 @@ Use to install package from non-PyPI feed (the azure one):
 pip3 install --index https://pkgs.dev.azure.com/johnmalc/Matrix42SDK/_packaging/my-feed/pypi/simple/ matrix42sdk
 ```
 
-## Documentation
-
-We use <https://sphinx-rtd-theme.readthedocs.io/> and <https://www.sphinx-doc.org/en/master/>
+## PyPI
 
 ```
-cd docs
-sphinx-apidoc -o source ../matrix42sdk
-make html
+poetry build
 ```

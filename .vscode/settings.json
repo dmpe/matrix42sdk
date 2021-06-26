@@ -2,6 +2,10 @@
     "python.languageServer": "Pylance",
     "python.formatting.provider": "black",
     "python.pythonPath": "/usr/bin/python3",
+    "python.linting.enabled": true,
+    "python.formatting.blackArgs": [
+      "--line-length=90"
+  ],
     "code-runner.executorMap": {
       "python": "python3",
     },
