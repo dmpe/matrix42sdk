@@ -107,8 +107,8 @@ For a **basic**, create a `Matrix42RestClient` object by using your (or any othe
 
 ```{python}
 import matrix42sdk
-from matrix42sdk import AuthNClient
-from matrix42sdk.api_endpoints import matrix42_objects, matrix42_fragments
+from matrix42sdk import Matrix42RestClient
+from matrix42sdk.api_endpoints import *
 ```
 
 For using `Access/API Tokens`, you can set your `MATRIX42SDK_API_TOKEN` via a shell (**higher priority**):
@@ -121,7 +121,7 @@ export MATRIX42SDK_API_TOKEN="xxx"
 and then:
 
 ```{python3}
-mat = matrix42_fragments.GDSFragements()
+mat = api_endpoints.fragments.FragmentsDataService()
 ```
 
 Then to [get a fragment for a specific CI](https://help.matrix42.com/030_DWP/030_INT/Business_Processes_and_API_Integrations/Public_API_reference_documentation/Fragments_Data_Service%3A_Get_Fragment_data), insert correct parameters according to the documentation:
