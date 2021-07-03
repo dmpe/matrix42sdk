@@ -1,5 +1,6 @@
 import json
 import requests
+from urllib.parse import urlencode
 from matrix42sdk.AuthNClient import Matrix42RestClient
 from requests.exceptions import HTTPError
 
@@ -154,6 +155,7 @@ class FragmentsDataService(Matrix42RestClient):
         if includeLocalizations is not None:
             payload.update({"includeLocalizations": includeLocalizations})
 
+        payload = urlencode(payload, safe=":,[]= ")
         try:
             r_ci_list = requests.get(
                 req_url,
@@ -240,6 +242,8 @@ class FragmentsDataService(Matrix42RestClient):
         if includeLocalizations is not None:
             payload.update({"includeLocalizations": includeLocalizations})
 
+        payload = urlencode(payload, safe=":,[]= ")
+
         try:
             r_ci_list = requests.get(
                 req_url,
@@ -276,7 +280,10 @@ class FragmentsDataService(Matrix42RestClient):
         put_url = self.url + self.path + "/%s" % ddname
         try:
             r_ci_create = requests.post(
-                put_url, verify=self._ssl_verify, headers=self._full_header, data=fragmentData
+                put_url,
+                verify=self._ssl_verify,
+                headers=self._full_header,
+                data=fragmentData,
             )
             r_ci_create.raise_for_status()
             return r_ci_create

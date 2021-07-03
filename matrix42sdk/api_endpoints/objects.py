@@ -1,5 +1,6 @@
 import json
 import requests
+from urllib.parse import urlencode
 from matrix42sdk.AuthNClient import Matrix42RestClient
 from requests.exceptions import HTTPError
 

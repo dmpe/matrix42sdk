@@ -82,14 +82,18 @@ class Matrix42RestClient(object):
         self._url = value
 
     @classmethod
-    def set_access_token_header(cls, _headers, _url, _api_token, _ssl_verify, *args, **kwargs):
+    def set_access_token_header(
+        cls, _headers, _url, _api_token, _ssl_verify, *args, **kwargs
+    ):
 
         site_endpoint = _url + MATRIX42_GENERATE_ACCESS_TOKEN_ENDPOINT
 
         # dont use .update() on dict because it is updated in place, hence returning None type
         tkn_dict = dict({"Authorization": "Bearer %s" % _api_token})
         access_headers = dict(_headers, **tkn_dict)
-        postReq = requests.post(site_endpoint, headers=access_headers, verify=_ssl_verify, *args, **kwargs)
+        postReq = requests.post(
+            site_endpoint, headers=access_headers, verify=_ssl_verify, *args, **kwargs
+        )
         raw_acc_token = postReq.json()["RawToken"]
 
         # here we want to update in-place
