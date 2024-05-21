@@ -18,9 +18,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8" #minimal
-requests = "^2"
-mypy = "0.*"
-pytest = "6.*"
+requests = "*"
+mypy = "*"
+pytest = "*"
 
 [tool.poetry.dev-dependencies]
 mock = "*"
