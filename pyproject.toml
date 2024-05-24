@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "matrix42sdk"
-version = "3.0.2"
+version = "3.0.3"
 description = "Python SDK for Matrix42 Enterprise Service Management CMBD"
 authors = ["John Malc <cincenko@outlook.com>"]
 homepage = "https://github.com/dmpe/matrix42sdk"
-documentation = ""
+documentation = "https://github.com/dmpe/matrix42sdk"
 license = "MIT"
 readme = "README.md"
 classifiers = [
@@ -18,11 +18,11 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8" #minimal
-requests = "^2"
-mypy = "0.*"
-pytest = "6.*"
+requests = "*"
+mypy = "*"
 
 [tool.poetry.dev-dependencies]
+pytest = "*"
 mock = "*"
 isort = {extras = ["pyproject"], version = "*"}
 black = {version = "*", allow-prereleases = true }
